@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "primereact/button";
 
-export default function Header({ toggleModal, numberOfContacts }) {
+export default function Header({ toggleDialog, numberOfContacts }) {
   return (
     <header className="m-2">
       <div className="flex justify-content-between align-content-center">
@@ -14,7 +14,7 @@ export default function Header({ toggleModal, numberOfContacts }) {
           label="Add Contact"
           icon="pi pi-plus"
           className="p-2 h-3rem align-self-center"
-          onClick={toggleModal(true)}
+          onClick={toggleDialog(true)}
         />
       </div>
     </header>

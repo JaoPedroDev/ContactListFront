@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { MaterialSymbol } from "react-material-symbols";
 import "react-material-symbols/rounded";
 import "./Contact.css";
 
@@ -10,11 +9,11 @@ export default function Contact({ contact }) {
   return (
     <Link
       to={`/contact/${contact.id}`}
-      className="no-underline bg-primary border-round flex flex-column w-25rem p-3"
+      className="no-underline bg-primary border-round flex flex-column w-20rem p-3"
     >
       <div className="flex">
         <img
-          className="card--image border-circle w-5rem h-5rem align-self-center"
+          className="border-circle w-4rem h-4rem align-self-center"
           src={contact.photoUrl}
           alt={`${contact.name} photo's`}
         />
