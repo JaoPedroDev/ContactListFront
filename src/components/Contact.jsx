@@ -1,10 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "react-material-symbols/rounded";
-import "./Contact.css";
 
 export default function Contact({ contact }) {
-  let iconsSize = 25;
 
   return (
     <Link
