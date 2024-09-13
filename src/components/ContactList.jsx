@@ -3,10 +3,10 @@ import Contact from "./Contact";
 
 export default function ContactList({ data, currentPage, getAllContacts }) {
   return (
-    <main className="main">
+    <main className="mx-2">
       {data?.content?.length === 0 && <div>No contacts found</div>}
 
-      <ul className="flex gap-3">
+      <ul className="flex flex-wrap gap-3 p-0 m-0 justify-content-center">
         {data?.content?.length > 0 &&
           data.content.map((contact) => (
             <Contact contact={contact} key={contact.id} />

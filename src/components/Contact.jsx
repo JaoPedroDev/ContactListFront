@@ -1,17 +1,21 @@
+import { Avatar } from "primereact/avatar";
 import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Contact({ contact }) {
-
   return (
     <Link
       to={`/contact/${contact.id}`}
-      className="no-underline bg-primary border-round flex flex-column w-20rem p-3"
+      className="no-underline bg-primary border-round w-20rem p-2"
     >
       <div className="flex">
-        <img
-          className="border-circle w-4rem h-4rem align-self-center"
-          src={contact.photoUrl}
+        <Avatar
+          className="align-self-center bg-white"
+          shape="circle"
+          size="xlarge"
+          {...(contact.photoUrl
+            ? { image: contact.photoUrl }
+            : { label: contact.name[0] })}
           alt={`${contact.name} photo's`}
         />
         <div className="pl-3">

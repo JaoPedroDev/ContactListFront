@@ -70,6 +70,9 @@ export default function App() {
       photoData.append("id", contactResponse.data.id);
       await updatePhoto(photoData);
     }
+
+    toggleDialog(false)();
+    getAllContacts();
   };
 
   const handleReset = () => {
@@ -203,7 +206,7 @@ export default function App() {
               <Controller
                 name="photoFile"
                 control={control}
-                rules={{ required: 'File upload is required' }}
+                // rules={{ required: 'File upload is required' }}
                 render={({ field }) => (
                   <FileUploadButton
                     onFileSelected={field.onChange}
