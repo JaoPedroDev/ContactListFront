@@ -25,7 +25,7 @@ export default function FileUploadButton({ onFileSelected, value}) {
         onChange={handleFileChange}
       />
       <Button
-        label="Upload File"
+        label="Upload Photo"
         icon="pi pi-upload"
         onClick={handleButtonClick}
         type="button"

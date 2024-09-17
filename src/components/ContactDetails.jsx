@@ -1,21 +1,28 @@
 import React from "react";
-import Contact from "./Contact";
-import ContactListHeader from "./ContactListHeader";
-import { Dialog } from "primereact/dialog";
+import { useParams } from "react-router-dom";
+import { deleteContact, getContact, updateContact, updatePhoto } from "../api/ContactService";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { InputText } from "primereact/inputtext";
 import FileUploadButton from "./FileUploadButton";
 import { Button } from "primereact/button";
+import { Avatar } from "primereact/avatar";
 import { useState } from "react";
-import { saveContact, updatePhoto } from "../api/ContactService";
+import { useNavigate } from "react-router-dom";
+import ContactDetailsHeader from "./ContactDetailsHeader";
+import { ConfirmDialog } from "primereact/confirmdialog";
 
-export default function ContactList({ data, currentPage, getAllContacts }) {
-  const [newContactDialogVisible, setNewContactDialogVisible] = useState(false);
+export default function ContactDetails({ reloadContacts }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
 
   const {
     control,
     handleSubmit,
     reset,
+    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -29,98 +36,91 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
     },
   });
 
-  const onSubmit = async (data) => {
-    const selectedPhoto = data?.photoFile;
+  const imageSource = photoPreview || getValues("photoUrl");
 
+  const fetchContact = async () => {
+    const response = await getContact(id);
+    reset(response.data);
+  };
+
+  const onSubmit = async (data) => {
     const contactData = {
+      id: data.id,
       name: data.name,
       email: data.email,
       phone: data.phone,
       address: data.address,
       title: data.title,
       status: data.status,
+      photoUrl: data.photoUrl,
     };
 
-    const contactResponse = await saveContact(contactData);
+    const contactResponse = await updateContact(contactData);
 
-    if (selectedPhoto) {
+    if (data.photoFile) {
       const photoData = new FormData();
-      photoData.append("file", selectedPhoto);
+      photoData.append("file", data.photoFile);
       photoData.append("id", contactResponse.data.id);
       await updatePhoto(photoData);
     }
 
-    toggleDialog(false)();
-    getAllContacts();
+    navigate("/");
+    reloadContacts();
   };
 
-  const handleReset = () => {
-    reset();
+  const handleCancel = () => {
+    navigate("/");
+  };
+
+  const previewPhoto = (file) => {
+    const url = URL.createObjectURL(file);
+    setPhotoPreview(url);
   };
 
   const toggleDialog = (state) => () => {
-    handleReset();
-    setNewContactDialogVisible(state);
+    setDeleteDialogVisible(state);
   };
+
+  const handleDelete = async () => {
+    await deleteContact(getValues("id"));
+    navigate("/");
+    reloadContacts();
+  };
+
+  useEffect(() => {
+    fetchContact();
+  }, [reset]);
 
   return (
     <div>
-      <ContactListHeader
-        numberOfContacts={data?.totalElements}
-        toggleDialog={toggleDialog}
+      <ContactDetailsHeader
+         toggleDialog={toggleDialog}
       />
-      <main className="mx-2">
-        {data?.content?.length === 0 && <div>No contacts found</div>}
-
-        <ul
-          className="gap-3 p-0 m-0 justify-content-center"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-          }}
-        >
-          {data?.content?.length > 0 &&
-            data.content.map((contact) => (
-              <Contact contact={contact} key={contact.id} />
-            ))}
-        </ul>
-
-        {data?.content?.length > 0 && data?.totalPages > 1 && (
-          <div>
-            <a
-              onClick={() => getAllContacts(currentPage - 1)}
-              className={currentPage === 0 ? "disabled" : ""}
-            >
-              &laquo;
-            </a>
-            {data &&
-              [...Array(data.totalPages).keys()].map((page, index) => (
-                <a
-                  onClick={() => getAllContacts(page)}
-                  className={page === currentPage ? "active" : ""}
-                  key={page}
-                >
-                  {page + 1}
-                </a>
-              ))}
-            <a
-              onClick={() => getAllContacts(currentPage + 1)}
-              className={data.totalPages === currentPage + 1 ? "disabled" : ""}
-            >
-              &raquo;
-            </a>
-          </div>
-        )}
-      </main>
-      <Dialog
-        visible={newContactDialogVisible}
-        modal
+      <ConfirmDialog
+        visible={deleteDialogVisible}
         onHide={() => toggleDialog(false)()}
-        header="New Contact"
-        className="w-8 md:w-6"
-      >
-        <hr className="mb-5 mt-0" />
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+        message="Are you sure you want to delete this contact?"
+        header="Delete Confirmation"
+        icon="pi pi-exclamation-triangle"
+        acceptLabel="Yes"
+        rejectLabel="No"
+        acceptClassName="p-button-danger"
+        accept={handleDelete}
+      />
+      <div className="flex flex-wrap gap-5 justify-content-center">
+        <Avatar
+          className="align-self-center w-20rem h-20rem text-8xl"
+          shape="circle"
+          {...(imageSource
+            ? { image: imageSource }
+            : { label: getValues("name")[0] })}
+          alt={`${getValues("name")} photo's`}
+        />
+        <form
+          className="flex-grow-0 w-9"
+          onSubmit={handleSubmit(onSubmit)}
+          autoComplete="off"
+        >
           <div className="formgrid grid">
             <div className="field col-12 md:col-6">
               <label htmlFor="name">Name</label>
@@ -241,10 +241,12 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
               <Controller
                 name="photoFile"
                 control={control}
-                // rules={{ required: 'File upload is required' }}
                 render={({ field }) => (
                   <FileUploadButton
-                    onFileSelected={field.onChange}
+                    onFileSelected={(file) => {
+                      previewPhoto(file);
+                      field.onChange(file);
+                    }}
                     value={field.value}
                   />
                 )}
@@ -260,7 +262,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
                 icon="pi pi-times"
                 className="p-button-text"
                 severity="danger"
-                onClick={() => toggleDialog(false)()}
+                onClick={handleCancel}
               />
               <Button
                 label="Save"
@@ -272,7 +274,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
             </div>
           </div>
         </form>
-      </Dialog>
+      </div>
     </div>
   );
 }

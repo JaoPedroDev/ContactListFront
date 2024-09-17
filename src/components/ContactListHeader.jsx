@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "primereact/button";
 
-export default function Header({ toggleDialog, numberOfContacts }) {
+export default function ContactListHeader({ toggleDialog, numberOfContacts }) {
   return (
     <header className="m-2">
       <div className="flex justify-content-between align-content-center">

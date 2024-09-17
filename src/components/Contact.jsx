@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 export default function Contact({ contact }) {
   return (
     <Link
-      to={`/contact/${contact.id}`}
-      className="no-underline bg-primary border-round w-20rem p-2"
+      to={`/contacts/${contact.id}`}
+      className="no-underline bg-primary border-round p-2"
     >
       <div className="flex">
         <Avatar
-          className="align-self-center bg-white"
+          className="align-self-center"
           shape="circle"
           size="xlarge"
           {...(contact.photoUrl
