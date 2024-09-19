@@ -1,13 +1,14 @@
 import React from "react";
+import { useState } from "react";
 import Contact from "./Contact";
 import ContactListHeader from "./ContactListHeader";
+import FileUploadButton from "./FileUploadButton";
+import { saveContact, updatePhoto } from "../api/ContactService";
 import { Dialog } from "primereact/dialog";
 import { Controller, useForm } from "react-hook-form";
 import { InputText } from "primereact/inputtext";
-import FileUploadButton from "./FileUploadButton";
+import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { useState } from "react";
-import { saveContact, updatePhoto } from "../api/ContactService";
 
 export default function ContactList({ data, currentPage, getAllContacts }) {
   const [newContactDialogVisible, setNewContactDialogVisible] = useState(false);
@@ -21,7 +22,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
     defaultValues: {
       name: "",
       email: "",
-      phone: "",
+      phone: null,
       address: "",
       title: "",
       status: "",
@@ -125,7 +126,12 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="formgrid grid">
             <div className="field col-12 md:col-6">
-              <label htmlFor="name">Name*</label>
+              <div className="flex justify-content-between align-items-center mb-2">
+                <label htmlFor="name">Name*</label>
+                {errors.name && (
+                  <small className="p-error">{errors.name.message}</small>
+                )}
+              </div>
               <Controller
                 name="name"
                 control={control}
@@ -140,12 +146,14 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
                   />
                 )}
               />
-              {errors.name && (
-                <small className="p-error">{errors.name.message}</small>
-              )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="email">Email*</label>
+              <div className="flex justify-content-between align-items-center mb-2">
+                <label htmlFor="email">Email*</label>
+                {errors.email && (
+                  <small className="p-error pl-2">{errors.email.message}</small>
+                )}
+              </div>
               <Controller
                 name="email"
                 control={control}
@@ -160,12 +168,14 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
                   />
                 )}
               />
-              {errors.email && (
-                <small className="p-error">{errors.email.message}</small>
-              )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="phone">Phone*</label>
+              <div className="flex justify-content-between align-items-center mb-2">
+                <label htmlFor="phone">Phone*</label>
+                {errors.phone && (
+                  <small className="p-error pl-2">{errors.phone.message}</small>
+                )}
+              </div>
               <Controller
                 name="phone"
                 control={control}
@@ -175,17 +185,22 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
                     id="phone"
                     {...field}
                     type="text"
+                    keyfilter={/^[0-9\s\-\(\)]+$/}
                     className="w-full"
                     invalid={errors.phone ? true : false}
                   />
                 )}
               />
-              {errors.phone && (
-                <small className="p-error">{errors.phone.message}</small>
-              )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="address">Address*</label>
+              <div className="flex justify-content-between align-items-center mb-2">
+                <label htmlFor="address">Address*</label>
+                {errors.address && (
+                  <small className="p-error pl-2">
+                    {errors.address.message}
+                  </small>
+                )}
+              </div>
               <Controller
                 name="address"
                 control={control}
@@ -200,12 +215,14 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
                   />
                 )}
               />
-              {errors.address && (
-                <small className="p-error">{errors.address.message}</small>
-              )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="title">Title*</label>
+              <div className="flex justify-content-between align-items-center mb-2">
+                <label htmlFor="title">Title*</label>
+                {errors.title && (
+                  <small className="p-error pl-2">{errors.title.message}</small>
+                )}
+              </div>
               <Controller
                 name="title"
                 control={control}
@@ -220,29 +237,33 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
                   />
                 )}
               />
-              {errors.title && (
-                <small className="p-error">{errors.title.message}</small>
-              )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="status">Status*</label>
+              <div className="flex justify-content-between align-items-center mb-2">
+                <label htmlFor="status">Status*</label>
+                {errors.status && (
+                  <small className="p-error pl-2">
+                    {errors.status.message}
+                  </small>
+                )}
+              </div>
               <Controller
                 name="status"
                 control={control}
                 rules={{ required: "Status is required" }}
                 render={({ field }) => (
-                  <InputText
+                  <Dropdown
                     id="status"
                     {...field}
-                    type="text"
+                    options={[
+                      { label: "Active", value: "Active" },
+                      { label: "Inactive", value: "Inactive" },
+                    ]}
                     className="w-full"
                     invalid={errors.status ? true : false}
                   />
                 )}
               />
-              {errors.status && (
-                <small className="p-error">{errors.status.message}</small>
-              )}
             </div>
             <div className="field col-12">
               <label htmlFor="photoFile">Profile Photo</label>

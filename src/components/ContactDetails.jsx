@@ -11,6 +11,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ContactDetailsHeader from "./ContactDetailsHeader";
 import { ConfirmDialog } from "primereact/confirmdialog";
+import { InputMask } from "primereact/inputmask";
+import { Dropdown } from "primereact/dropdown";
 
 export default function ContactDetails({ reloadContacts }) {
   const { id } = useParams();
@@ -171,6 +173,7 @@ export default function ContactDetails({ reloadContacts }) {
                     id="phone"
                     {...field}
                     type="text"
+                    keyfilter={/^[0-9\s\-\(\)]+$/}
                     className="w-full"
                     invalid={errors.name ? true : false}
                   />
@@ -227,10 +230,13 @@ export default function ContactDetails({ reloadContacts }) {
                 control={control}
                 rules={{ required: "Status is required" }}
                 render={({ field }) => (
-                  <InputText
+                  <Dropdown
                     id="status"
                     {...field}
-                    type="text"
+                    options={[
+                      { label: "Active", value: "Active" },
+                      { label: "Inactive", value: "Inactive" },
+                    ]}
                     className="w-full"
                     invalid={errors.name ? true : false}
                   />
