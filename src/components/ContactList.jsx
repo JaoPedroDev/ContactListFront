@@ -115,6 +115,8 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
       <Dialog
         visible={newContactDialogVisible}
         modal
+        draggable={false}
+        resizable={false}
         onHide={() => toggleDialog(false)()}
         header="New Contact"
         className="w-8 md:w-6"
@@ -123,7 +125,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="formgrid grid">
             <div className="field col-12 md:col-6">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">Name*</label>
               <Controller
                 name="name"
                 control={control}
@@ -143,7 +145,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
               )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Email*</label>
               <Controller
                 name="email"
                 control={control}
@@ -154,6 +156,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
                     {...field}
                     type="text"
                     className="w-full"
+                    invalid={errors.email ? true : false}
                   />
                 )}
               />
@@ -162,7 +165,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
               )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="phone">Phone</label>
+              <label htmlFor="phone">Phone*</label>
               <Controller
                 name="phone"
                 control={control}
@@ -173,6 +176,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
                     {...field}
                     type="text"
                     className="w-full"
+                    invalid={errors.phone ? true : false}
                   />
                 )}
               />
@@ -181,7 +185,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
               )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="address">Address</label>
+              <label htmlFor="address">Address*</label>
               <Controller
                 name="address"
                 control={control}
@@ -192,6 +196,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
                     {...field}
                     type="text"
                     className="w-full"
+                    invalid={errors.address ? true : false}
                   />
                 )}
               />
@@ -200,7 +205,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
               )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="title">Title</label>
+              <label htmlFor="title">Title*</label>
               <Controller
                 name="title"
                 control={control}
@@ -211,6 +216,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
                     {...field}
                     type="text"
                     className="w-full"
+                    invalid={errors.title ? true : false}
                   />
                 )}
               />
@@ -219,7 +225,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
               )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="status">Status</label>
+              <label htmlFor="status">Status*</label>
               <Controller
                 name="status"
                 control={control}
@@ -230,6 +236,7 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
                     {...field}
                     type="text"
                     className="w-full"
+                    invalid={errors.status ? true : false}
                   />
                 )}
               />
@@ -238,10 +245,10 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
               )}
             </div>
             <div className="field col-12">
+              <label htmlFor="photoFile">Profile Photo</label>
               <Controller
                 name="photoFile"
                 control={control}
-                // rules={{ required: 'File upload is required' }}
                 render={({ field }) => (
                   <FileUploadButton
                     onFileSelected={field.onChange}

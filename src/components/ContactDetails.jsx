@@ -102,8 +102,6 @@ export default function ContactDetails({ reloadContacts }) {
         message="Are you sure you want to delete this contact?"
         header="Delete Confirmation"
         icon="pi pi-exclamation-triangle"
-        acceptLabel="Yes"
-        rejectLabel="No"
         acceptClassName="p-button-danger"
         accept={handleDelete}
       />
@@ -123,7 +121,7 @@ export default function ContactDetails({ reloadContacts }) {
         >
           <div className="formgrid grid">
             <div className="field col-12 md:col-6">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">Name*</label>
               <Controller
                 name="name"
                 control={control}
@@ -143,7 +141,7 @@ export default function ContactDetails({ reloadContacts }) {
               )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Email*</label>
               <Controller
                 name="email"
                 control={control}
@@ -154,6 +152,7 @@ export default function ContactDetails({ reloadContacts }) {
                     {...field}
                     type="text"
                     className="w-full"
+                    invalid={errors.name ? true : false}
                   />
                 )}
               />
@@ -162,7 +161,7 @@ export default function ContactDetails({ reloadContacts }) {
               )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="phone">Phone</label>
+              <label htmlFor="phone">Phone*</label>
               <Controller
                 name="phone"
                 control={control}
@@ -173,6 +172,7 @@ export default function ContactDetails({ reloadContacts }) {
                     {...field}
                     type="text"
                     className="w-full"
+                    invalid={errors.name ? true : false}
                   />
                 )}
               />
@@ -181,7 +181,7 @@ export default function ContactDetails({ reloadContacts }) {
               )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="address">Address</label>
+              <label htmlFor="address">Address*</label>
               <Controller
                 name="address"
                 control={control}
@@ -192,6 +192,7 @@ export default function ContactDetails({ reloadContacts }) {
                     {...field}
                     type="text"
                     className="w-full"
+                    invalid={errors.name ? true : false}
                   />
                 )}
               />
@@ -200,7 +201,7 @@ export default function ContactDetails({ reloadContacts }) {
               )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="title">Title</label>
+              <label htmlFor="title">Title*</label>
               <Controller
                 name="title"
                 control={control}
@@ -211,6 +212,7 @@ export default function ContactDetails({ reloadContacts }) {
                     {...field}
                     type="text"
                     className="w-full"
+                    invalid={errors.name ? true : false}
                   />
                 )}
               />
@@ -219,7 +221,7 @@ export default function ContactDetails({ reloadContacts }) {
               )}
             </div>
             <div className="field col-12 md:col-6">
-              <label htmlFor="status">Status</label>
+              <label htmlFor="status">Status*</label>
               <Controller
                 name="status"
                 control={control}
@@ -230,6 +232,7 @@ export default function ContactDetails({ reloadContacts }) {
                     {...field}
                     type="text"
                     className="w-full"
+                    invalid={errors.name ? true : false}
                   />
                 )}
               />
