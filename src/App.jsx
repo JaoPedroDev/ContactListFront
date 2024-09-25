@@ -15,7 +15,7 @@ export default function App() {
   const [data, setData] = useState({});
   const [currentPage, setCurrentPage] = useState(0);
 
-  const getAllContacts = async (page = 0, size = 5) => {
+  const getAllContacts = async (page = 0, size = 6) => {
     const response = await getContacts(page, size);
     setData(response.data);
     setCurrentPage(response.data.number);

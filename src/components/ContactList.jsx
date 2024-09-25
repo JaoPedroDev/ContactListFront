@@ -9,9 +9,12 @@ import { Controller, useForm } from "react-hook-form";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
+import { Paginator } from "primereact/paginator";
 
 export default function ContactList({ data, currentPage, getAllContacts }) {
   const [newContactDialogVisible, setNewContactDialogVisible] = useState(false);
+  const [pageFirst, setPageFirst] = useState(0);
+  const [pageRows, setPageRows] = useState(6);
 
   const {
     control,
@@ -59,6 +62,12 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
     reset();
   };
 
+  const handlePageChange = (event) => {
+    getAllContacts(event.page);
+    setPageFirst(event.first);
+    setPageRows(event.rows);
+  };
+
   const toggleDialog = (state) => () => {
     handleReset();
     setNewContactDialogVisible(state);
@@ -87,30 +96,13 @@ export default function ContactList({ data, currentPage, getAllContacts }) {
         </ul>
 
         {data?.content?.length > 0 && data?.totalPages > 1 && (
-          <div>
-            <a
-              onClick={() => getAllContacts(currentPage - 1)}
-              className={currentPage === 0 ? "disabled" : ""}
-            >
-              &laquo;
-            </a>
-            {data &&
-              [...Array(data.totalPages).keys()].map((page, index) => (
-                <a
-                  onClick={() => getAllContacts(page)}
-                  className={page === currentPage ? "active" : ""}
-                  key={page}
-                >
-                  {page + 1}
-                </a>
-              ))}
-            <a
-              onClick={() => getAllContacts(currentPage + 1)}
-              className={data.totalPages === currentPage + 1 ? "disabled" : ""}
-            >
-              &raquo;
-            </a>
-          </div>
+          <Paginator
+            className="bg-transparent border-0 border-transparent pt-5"
+            first={pageFirst}
+            rows={pageRows}
+            totalRecords={data?.totalElements}
+            onPageChange={handlePageChange}
+          />
         )}
       </main>
       <Dialog
